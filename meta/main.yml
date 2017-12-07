@@ -1,3 +1,10 @@
 ---
-  dependencies:
-    - { role: kernel-tuning }
+  galaxy_info:
+    author: "Safetyculture"
+    description: syncgateway
+    license: MIT
+    min_ansible_version: 2.0
+    version: 1.0.0
+    categories:
+      - system
+    dependencies: []
