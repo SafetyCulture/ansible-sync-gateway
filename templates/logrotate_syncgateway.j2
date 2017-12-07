@@ -1,0 +1,9 @@
+{{ syncgateway_logdir }}/*.log {
+       	daily
+        rotate 14
+        copytruncate
+        delaycompress
+        compress
+        notifempty
+        missingok
+}

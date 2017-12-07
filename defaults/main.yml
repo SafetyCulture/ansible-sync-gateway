@@ -1,0 +1,4 @@
+---
+syncgateway_package: couchbase-sync-gateway-enterprise_1.4.1-3_x86_64.deb
+syncgateway_bucket: soter
+syncgateway_logdir: /var/log/sync_gateway

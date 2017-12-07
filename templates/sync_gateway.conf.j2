@@ -1,0 +1,27 @@
+description "Sync Gateway Upstart Script"
+version "0.1.0"
+author "Andrew Reslan"
+
+# Upstart env vars
+env RUNAS=sync_gateway
+env RUNBASE=/home/sync_gateway
+env PIDFILE=/var/run/sync-gateway.pid
+env GATEWAY=/opt/couchbase-sync-gateway/bin/sync_gateway
+env CONFIG=/home/sync_gateway/sync_gateway.json
+env LOGS={{ syncgateway_logdir }}
+env NAME=sync_gateway
+
+# Keep the server running on crash or machine reboot
+start on runlevel [2345]
+stop on shutdown
+respawn
+
+pre-start script
+  mkdir -p $LOGS
+  chown -R ${RUNAS}:adm $LOGS
+
+  mkdir -p ${RUNBASE}/data
+  chown -R ${RUNAS}:${RUNAS} ${RUNBASE}/data
+end script
+
+exec start-stop-daemon --start --chuid $RUNAS --chdir $RUNBASE --make-pidfile --pidfile $PIDFILE --startas $GATEWAY -- $CONFIG 2>> ${LOGS}/${NAME}.log

@@ -1,0 +1,55 @@
+---
+  - name: Copy SyncGateway package
+    copy:
+      src: "{{ syncgateway_package }}"
+      dest: /opt/{{ syncgateway_package }}
+
+  - name: Install Sync Gateway package
+    apt:
+      state: present
+      deb: /opt/{{ syncgateway_package }}
+
+  - name: Template Sync Gateway Configuration
+    template:
+      src: sync_gateway.json.j2
+      dest: /home/sync_gateway/sync_gateway.json
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Create log directory in /var/logs
+    file:
+      path: "{{ syncgateway_logdir }}"
+      state: directory
+      owner: sync_gateway
+      group: adm
+      mode: 0755
+
+  - name: Remove packaged logs directory under /home/sync_gateway/logs
+    file:
+      path: /home/sync_gateway/logs
+      state: absent
+    when: syncgateway_logdir != "/home/sync_gateway/logs"
+
+  - name: Set ownership of sync_gateway log file
+    file:
+      path: "{{ syncgateway_logdir }}/sync_gateway.log"
+      owner: sync_gateway
+      group: adm
+      state: touch
+
+  - name: Template sync_gateway init script
+    template:
+      src: sync_gateway.conf.j2
+      dest: /etc/init/sync_gateway.conf
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Logrotate Configuration for Sync Gateway
+    template:
+      src: logrotate_syncgateway.j2
+      dest: /etc/logrotate.d/sync_gateway
+      owner: root
+      group: root
+      mode: 0644
