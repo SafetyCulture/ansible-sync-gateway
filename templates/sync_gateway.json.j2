@@ -1,13 +1,8 @@
 {
   "interface": "0.0.0.0:4984",
   "adminInterface": "0.0.0.0:4985",
-  "logging": {
-    "default": {
-      "logFilePath": "logs/sync_gateway.log",
-      "logKeys": ["*"],
-      "logLevel": "info"
-    }
-  },
+  "logFilePath": "logs/sync_gateway.log",
+  "log": ["*"],
   "databases": {
     "soter": {
       "bucket": "{{ syncgateway_bucket }}",
