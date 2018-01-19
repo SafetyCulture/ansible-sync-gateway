@@ -17,13 +17,23 @@
       group: root
       mode: 0644
 
-  - name: Create log directory in /var/logs
+  - name: Create log directory
     file:
       path: "{{ syncgateway_logdir }}"
       state: directory
       owner: sync_gateway
       group: adm
       mode: 0755
+
+  - name: Create log link in /var/logs
+    file:
+      src: "{{ syncgateway_logdir }}"
+      path: /var/log/sync_gateway
+      state: link
+      owner: sync_gateway
+      group: adm
+      mode: 0755
+    when: syncgateway_logdir != "/var/log/sync_gateway"
 
   - name: Remove packaged logs directory under /home/sync_gateway/logs
     file:
